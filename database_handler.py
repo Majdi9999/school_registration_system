@@ -4,7 +4,7 @@ class DataBaseHandler:
     DB_NAME = 'students.db'
     
     @staticmethod
-    def _connection():
+    def _connect():
         return sqlite3.connect(DataBaseHandler.DB_NAME)
     
     @staticmethod
