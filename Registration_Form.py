@@ -39,5 +39,5 @@ class RegistrationForm(tk.Frame):
     def reset_form(self):
         self.name_entry.delete(0, 'end')
         self.email_entry.delete(0, 'end')
-        self.age_entry.set(10)
+        self.age_entry.set(10) 
         self.name_entry.set(None)
