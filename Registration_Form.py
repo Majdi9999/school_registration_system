@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from database_handler import DataBaseHandler
+from tkinter import messagebox
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 class RegistrationForm(tk.Frame):
     def __init__(self, parent,refresh_callback):
         super().__init__(parent,padx=10,pady=10)
@@ -25,6 +29,12 @@ class RegistrationForm(tk.Frame):
         
         self.submit_button = tk.Button(self, text="Submit",command=self.submit_form)
         self.submit_button.pack(fill='x')
+
+        self.visualize_button = tk.Button(self, text="Visualize Gender Distribution", command=self.visualize_gender_distribution)
+        self.visualize_button.pack(fill='x', pady=(10, 0))
+
+        self.exit_button = tk.Button(self, text="Exit", command=self.quit_app)
+        self.exit_button.pack(fill='x', pady=(10, 0))
     
     def submit_form(self):
         name = self.name_entry.get()
@@ -42,3 +52,28 @@ class RegistrationForm(tk.Frame):
         self.email_entry.delete(0, 'end')
         self.age_entry.set(10) 
         self.name_entry.set(None)
+
+    def quit_app(self):
+        self.master.destroy()
+
+    def visualize_gender_distribution(self):
+        students = DataBaseHandler.read_all_students()
+
+        if not students:
+            messagebox.showinfo("No Data", "There are no students to visualize.")  # إعلام المستخدم إذا ما في بيانات
+            return
+
+        
+        male_count = sum(1 for s in students if s[4] == 'Male')
+        female_count = sum(1 for s in students if s[4] == 'Female')
+
+        
+        fig, ax = plt.subplots()
+        ax.pie([male_count, female_count], labels=['Male', 'Female'], autopct='%1.1f%%', startangle=90)
+        ax.axis('equal') 
+
+        chart_window = tk.Toplevel(self)
+        chart_window.title("Gender Distribution")
+        canvas = FigureCanvasTkAgg(fig, master=chart_window)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill='both', expand=True)

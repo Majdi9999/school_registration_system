@@ -19,6 +19,8 @@ class MainApp(tk.Tk):
         self.student_listing = StudentListing(self)
         self.student_listing.pack(side='right', fill='both',expand=True,padx=10,pady=10)
 
+        
+
     def refresh_listing(self):
         self.student_listing.load_students()
 
